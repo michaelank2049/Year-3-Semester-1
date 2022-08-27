@@ -1,0 +1,63 @@
+CSCI 4333
+Design of Database Systems
+Fall 2021
+Homework #2
+
+1)
+SELECT DISTINCT s.stuid, 
+	CONCAT(s.fname,' ',s.lname) AS student, 
+	d.deptname AS major
+FROM student AS s INNER JOIN department AS d ON(s.major=d.deptCode)
+	WHERE(s.major="CSCI")
+	OR(s.major="CINF");
+
+2)
+SELECT s.stuid, 
+	CONCAT(s.fname,' ',s.lname) AS student, 
+	CONCAT(f.fname,' ',f.lname) AS advisor, 
+	d.deptName AS major 
+FROM student AS s INNER JOIN department AS d ON(s.major=d.deptCode) 
+	INNER JOIN faculty AS f ON(f.facId=s.advisor) 
+	WHERE(s.major="CSCI") 
+	OR(s.major="CINF"); 
+
+3)
+SELECT s.stuid, 
+	CONCAT(s.fname,' ',s.lname) AS student, 
+	CONCAT(f.fname,' ',f.lname) AS advisor, 
+	d.deptName AS major 
+FROM student AS s INNER JOIN department AS d ON(s.major=d.deptCode) 
+	INNER JOIN faculty AS f ON(f.facId=s.advisor) 
+	WHERE(s.major="CSCI") 
+	OR(s.major="CINF") 
+	OR(s.minor=”CSCI”) 
+	OR(s.minor=”CINF”); 
+
+4)
+SELECT s.stuid, 
+	CONCAT(s.fname,' ',s.lname) AS student, 
+	CONCAT(f.fname,' ',f.lname) AS advisor, 
+	d.deptName AS major, 
+	l.deptName AS minor 
+FROM student AS s INNER JOIN department AS d ON(s.major=d.deptCode) 
+	INNER JOIN department AS l ON(s.minor=l.deptCode) 
+	INNER JOIN faculty AS f ON(f.facId=s.advisor) 
+	WHERE(s.major="CSCI") 
+	OR(s.major="CINF") 
+	OR(s.minor="CSCI") 
+	OR(s.minor="CINF"); 
+
+5)
+SELECT DISTINCT CONCAT(s.fname,' ',s.lname) AS "student with a grade of B or above in a course" 
+	FROM student AS s 
+	INNER JOIN enroll AS e ON(s.stuId=e.stuId) 
+	WHERE(e.grade="A") 
+	OR(e.grade="A-") 
+	OR(e.grade="B+") 
+	OR(e.grade="B-"); 
+
+
+
+
+
+

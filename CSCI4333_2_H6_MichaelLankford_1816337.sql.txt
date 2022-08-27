@@ -1,0 +1,62 @@
+Michael Lankford
+1816337
+HW #6
+
+1) SELECT DISTINCT s.LName, s.FName, s.currentLevelId, l.level
+	FROM Swimmer AS s 
+		JOIN Level AS l ON(l.LevelId = s.currentLevelId) 
+	WHERE LName = 'Khan';
+
+
+2) SELECT DISTINCT s.LName, s.FName
+	FROM Swimmer AS s
+		JOIN Participation AS P ON(s.SwimmerId = p.SwimmerId)
+		JOIN Event AS e ON(e.EventId = p.EventId)
+		JOIN Meet AS m ON(m.MeetId = e.MeetId)
+	WHERE m.Title = 'UHCL Open';
+
+
+3) SELECT swimmerId, Main_CT_Id AS ct_id 
+	FROM Swimmer
+	UNION
+	SELECT swimmerId, CT_Id 
+	FROM OtherCaretaker;
+
+
+4) SELECT DISTINCT c.LName, c.fname
+	FROM Caretaker AS c
+		INNER JOIN OtherCareTaker AS o1 ON(c.CT_Id = o1.CT_Id)
+		INNER JOIN Swimmer AS s1 ON(o1.SwimmerId = s1.SwimmerId)
+		INNER JOIN OtherCareTaker AS o2 ON(c.CT_Id = o2.CT_id)
+		INNER JOIN Swimmer AS s2 ON(o2.SwimmerId = s2.SwimmerId)
+	WHERE s1.SwimmerId = 2
+	OR s2.SwimmerId = 3
+	ORDER BY c.fname;
+
+
+5) SELECT m.meetId, m.title, COUNT(e.title) AS 'Number of 100m events'
+	FROM Meet AS m 
+		JOIN Event AS e ON(e.MeetId = m.MeetId)
+	WHERE e.title LIKE '%100m%'	
+	GROUP BY m.meetId
+	HAVING COUNT(e.title) >= 3;
+
+
+6) SELECT m.meetId, m.title, COUNT(DISTINCT e.title) AS 'number of events', COUNT(DISTINCT p.SwimmerId) AS 'number of swimmers'
+	FROM Meet AS m
+		INNER JOIN Event AS e ON(e.MeetId = m.meetId)
+		INNER JOIN Participation AS p ON(p.EventId = e.EventId)
+	GROUP BY m.meetId;
+
+
+7) WITH meet3 AS (
+	SELECT DISTINCT p.swimmerId
+	FROM participation AS p 
+		INNER JOIN event AS e ON (p.eventId = e.eventId)
+	WHERE e.meetId = 3
+	)
+	SELECT DISTINCT s.swimmerId, CONCAT(s.fname, ' ', s.lname) as swimmer
+	FROM Swimmer AS s INNER JOIN participation AS p1 ON (s.SwimmerId = p1.SwimmerId)
+		INNER JOIN event AS e1 ON (p1.eventId = e1.eventId)
+	WHERE e1.meetId = 1
+	AND s.swimmerId NOT IN (SELECT swimmerId FROM meet3);
